@@ -81,7 +81,6 @@ bool CheckProofOfWork(uint256 hash, unsigned int nBits)
     uint256 bnTarget;
     bnTarget.SetCompact(nBits, &fNegative, &fOverflow);
 
-    LogPrintf("hash: %08x, nBits: %08x, ProofOfWorkLimit: %08x\n", hash.GetCompact(), bnTarget.GetCompact(), Params().ProofOfWorkLimit().GetCompact());
     // Check range
     if (fNegative || bnTarget == 0 || fOverflow || bnTarget > Params().ProofOfWorkLimit())
         return error("CheckProofOfWork() : nBits below minimum work");
@@ -116,5 +115,7 @@ unsigned int ComputeMinWork(unsigned int nBase, int64_t nTime)
     }
     if (bnResult > bnLimit)
         bnResult = bnLimit;
+
+    LogPrintf("bnResult: %d\n", bnResult.GetCompact());
     return bnResult.GetCompact();
 }
