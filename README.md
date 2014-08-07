@@ -1,7 +1,7 @@
 Bitcoin Core OpenNet
 ====================
 
-You need to compile first, please google it.
+You need to compile first, please google how to do it.
 
 Execution
 ---------
