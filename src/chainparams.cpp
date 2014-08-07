@@ -10,6 +10,7 @@
 #include "util.h"
 
 #include <boost/assign/list_of.hpp>
+#include <iostream>
 
 using namespace std;
 using namespace boost::assign;
@@ -95,6 +96,11 @@ unsigned int pnSeed[] =
     0x4675d655, 0x354e4826, 0xb67ac152, 0xaeccf285, 0xea625b4e, 0xbcd6031f, 0x5e81eb18, 0x74b347ce,
     0x3ca56ac1, 0x54ee4546, 0x38a8175e, 0xa3c21155, 0x2f01576d, 0x5d7ade50, 0xa003ae48, 0x2bc1d31f,
     0x13f5094c, 0x7ab32648, 0x542e9fd5, 0x53136bc1, 0x7fdf51c0, 0x802197b2, 0xa2d2cc5b, 0x6b5f4bc0,
+};
+
+unsigned int pnGCoinSeed[] =
+{
+    0x6401a8c0, 0x205a708c,
 };
 
 class CMainParams : public CChainParams {
@@ -277,6 +283,228 @@ public:
 };
 static CRegTestParams regTestParams;
 
+class CGCoin30Params : public CChainParams {
+public:
+    CGCoin30Params() {
+      networkID = CBaseChainParams::GCOIN30;
+      strNetworkID = "gcoin30";
+        // The message start string is designed to be unlikely to occur in normal data.
+        // The characters are rarely used upper ASCII, not valid as UTF-8, and produce
+        // a large 4-byte int at any alignment.
+        pchMessageStart[0] = 0xab;  //171,G:71
+        pchMessageStart[1] = 0xa7;  //167,C:67
+        pchMessageStart[2] = 0x97;  //151,3:51
+        pchMessageStart[3] = 0x94;  //148,0:48
+        // generate from website: http://kjur.github.io/jsrsasign/sample-ecdsa.html
+        vAlertPubKey = ParseHex("046107198704dcb7519548b578656dc29462c6a5355de7fa86cc2146f7bab7788b52b9913b8a412877fc73bcb65a4e5cf4ac4ea0c23f59aceac9c25d9454c343bc");
+        nDefaultPort = 28333;
+        bnProofOfWorkLimit = ~uint256(0) >> 32;
+        nSubsidyHalvingInterval = 420000;      // GCoin30: mining reward is cut in half every 420,000 blocks,
+        nEnforceBlockUpgradeMajority = 750;
+        nRejectBlockOutdatedMajority = 950;
+        nToCheckBlockUpgradeMajority = 1000;
+        nMinerThreads = 0;
+        nTargetTimespan = 7 * 24 * 60 * 60; // GCoin30: 1 week
+        nTargetSpacing = 5 * 60;            // GCoin30: 5 mins/tx
+        // After nTargetTimespan / nTargetSpacing blocks, the difficulty changes
+        // 7 * 24 * 60 * 60 / (5 * 60) = 2520 blocks
+        
+        const char* pszTimestamp = "OpenNet GCoin Project 2014.8 GCoin30";
+        CMutableTransaction txNew;
+        txNew.vin.resize(1);
+        txNew.vout.resize(1);
+        txNew.vin[0].scriptSig = CScript() << 486604799 << CScriptNum(4) << vector<unsigned char>((const unsigned char*)pszTimestamp, (const unsigned char*)pszTimestamp + strlen(pszTimestamp));
+        txNew.vout[0].nValue = 50 * COIN;
+        txNew.vout[0].scriptPubKey = CScript() << ParseHex("04a3a8584b519bb42f63defcdd1bec62e685d8204ebe83a02f80cae170c207934591a1e739bad2f5ed632844c636504d8587ecabaf0b3168afb4f613895fd1105a") << OP_CHECKSIG;
+        genesis.vtx.push_back(txNew);
+        genesis.hashPrevBlock = 0;
+        genesis.hashMerkleRoot = genesis.BuildMerkleTree();
+        genesis.nVersion = 1;
+        genesis.nTime    = 1407343534;
+        genesis.nBits    = 0x1d00ffff;
+        genesis.nNonce   = 1772699808;
+        hashGenesisBlock = genesis.GetHash();
+        //genesis hash: 00000000f5ca43a28418269b8473122f66aa64fc5def077f4ac1d26bb803adf6
+        
+        base58Prefixes[PUBKEY_ADDRESS] = list_of(0);
+        base58Prefixes[SCRIPT_ADDRESS] = list_of(5);
+        base58Prefixes[SECRET_KEY] =     list_of(128);
+        base58Prefixes[EXT_PUBLIC_KEY] = list_of(0x04)(0x88)(0xB2)(0x1E);
+        base58Prefixes[EXT_SECRET_KEY] = list_of(0x04)(0x88)(0xAD)(0xE4);
+        
+        // Convert the pnSeeds array into usable address objects.
+        for (unsigned int i = 0; i < ARRAYLEN(pnGCoinSeed); i++)
+        {
+            // It'll only connect to one or two seed nodes because once it connects,
+            // it'll get a pile of addresses with newer timestamps.
+            // Seed nodes are given a random 'last seen time' of between one and two
+            // weeks ago.
+            const int64_t nOneWeek = 7*24*60*60;
+            struct in_addr ip;
+            memcpy(&ip, &pnGCoinSeed[i], sizeof(ip));
+            CAddress addr(CService(ip, GetDefaultPort()));
+            addr.nTime = GetTime() - GetRand(nOneWeek) - nOneWeek;
+            vFixedSeeds.push_back(addr);
+        }
+        
+        fRequireRPCPassword = true;
+        fMiningRequiresPeers = true;
+        fDefaultCheckMemPool = false;
+        fAllowMinDifficultyBlocks = false;
+        fRequireStandard = true;
+        fMineBlocksOnDemand = false;
+    }
+};
+static CGCoin30Params gCoin30Params;
+
+class CGCoin12Params : public CChainParams {
+public:
+    CGCoin12Params() {
+      networkID = CBaseChainParams::GCOIN12;
+      strNetworkID = "gcoin12";
+        // The message start string is designed to be unlikely to occur in normal data.
+        // The characters are rarely used upper ASCII, not valid as UTF-8, and produce
+        // a large 4-byte int at any alignment.
+        pchMessageStart[0] = 0xab;  //171,G:71
+        pchMessageStart[1] = 0xa7;  //167,C:67
+        pchMessageStart[2] = 0x95;  //149,1:49
+        pchMessageStart[3] = 0x96;  //150,2:50
+        // generate from website: http://kjur.github.io/jsrsasign/sample-ecdsa.html
+        vAlertPubKey = ParseHex("04aca85a7b5eb2b429b86fa4994a4c7e061e268b25b0f06f813272df1959e1440fd696e7c9f92565aca747361d16f4cf28c64af2f9868e39b3d925967746720afc");
+        nDefaultPort = 38333;
+        bnProofOfWorkLimit = ~uint256(0) >> 20;
+        nSubsidyHalvingInterval = 1040000;      // GCoin12: mining reward is cut in half every 1040,000 blocks,
+        nEnforceBlockUpgradeMajority = 750;
+        nRejectBlockOutdatedMajority = 950;
+        nToCheckBlockUpgradeMajority = 1000;
+        nMinerThreads = 0;
+        nTargetTimespan = 2.8 * 24 * 60 * 60; // GCoin12: 2.8 days
+        nTargetSpacing = 2 * 60;            // GCoin12: 2 mins/tx
+        // After nTargetTimespan / nTargetSpacing blocks, the difficulty changes
+        // 7 * 24 * 60 * 60 / (5 * 60) = 2520 blocks
+        
+        const char* pszTimestamp = "OpenNet GCoin Project 2014.8 GCoin12";
+        CMutableTransaction txNew;
+        txNew.vin.resize(1);
+        txNew.vout.resize(1);
+        txNew.vin[0].scriptSig = CScript() << 486604799 << CScriptNum(4) << vector<unsigned char>((const unsigned char*)pszTimestamp, (const unsigned char*)pszTimestamp + strlen(pszTimestamp));
+        txNew.vout[0].nValue = 50 * COIN;
+        txNew.vout[0].scriptPubKey = CScript() << ParseHex("04ec84231d72efb46d46d0b7b0ab88405ea9c615a9c30112e5cc7003278ba060bd9bd403be05eb9300c9b91ac44bb21fa5718a0ae97789601b159e6c0f56369787") << OP_CHECKSIG;
+        genesis.vtx.push_back(txNew);
+        genesis.hashPrevBlock = 0;
+        genesis.hashMerkleRoot = genesis.BuildMerkleTree();
+        genesis.nVersion = 1;
+        genesis.nTime    = 1407294105;
+        genesis.nBits    = 0x1d00ffff;
+        genesis.nNonce   = 1896777681;
+        hashGenesisBlock = genesis.GetHash();
+        
+        base58Prefixes[PUBKEY_ADDRESS] = list_of(0);
+        base58Prefixes[SCRIPT_ADDRESS] = list_of(5);
+        base58Prefixes[SECRET_KEY] =     list_of(128);
+        base58Prefixes[EXT_PUBLIC_KEY] = list_of(0x04)(0x88)(0xB2)(0x1E);
+        base58Prefixes[EXT_SECRET_KEY] = list_of(0x04)(0x88)(0xAD)(0xE4);
+        
+        // Convert the pnSeeds array into usable address objects.
+        for (unsigned int i = 0; i < ARRAYLEN(pnGCoinSeed); i++)
+        {
+            // It'll only connect to one or two seed nodes because once it connects,
+            // it'll get a pile of addresses with newer timestamps.
+            // Seed nodes are given a random 'last seen time' of between one and two
+            // weeks ago.
+            const int64_t nOneWeek = 7*24*60*60;
+            struct in_addr ip;
+            memcpy(&ip, &pnGCoinSeed[i], sizeof(ip));
+            CAddress addr(CService(ip, GetDefaultPort()));
+            addr.nTime = GetTime() - GetRand(nOneWeek) - nOneWeek;
+            vFixedSeeds.push_back(addr);
+        }
+        
+        fRequireRPCPassword = true;
+        fMiningRequiresPeers = true;
+        fDefaultCheckMemPool = false;
+        fAllowMinDifficultyBlocks = false;
+        fRequireStandard = true;
+        fMineBlocksOnDemand = false;
+    }
+};
+static CGCoin12Params gCoin12Params;
+
+class CGCoin01Params : public CChainParams {
+public:
+    CGCoin01Params() {
+      networkID = CBaseChainParams::GCOIN01;
+      strNetworkID = "gcoin01";
+        // The message start string is designed to be unlikely to occur in normal data.
+        // The characters are rarely used upper ASCII, not valid as UTF-8, and produce
+        // a large 4-byte int at any alignment.
+        pchMessageStart[0] = 0xab;  //171,G:71
+        pchMessageStart[1] = 0xa7;  //167,C:67
+        pchMessageStart[2] = 0x94;  //148,0:48
+        pchMessageStart[3] = 0x95;  //149,0:49
+        // generate from website: http://kjur.github.io/jsrsasign/sample-ecdsa.html
+        vAlertPubKey = ParseHex("047252206ac62949b77d8f2b14db6220736c16205a2b39796636ff15c2d977f2da3edfe1ea5a8ea6925c76207f4c286ed4d2bf559f49d922f7bd8d97198f1ea26d");
+        nDefaultPort = 48333;
+        bnProofOfWorkLimit = ~uint256(0) >> 20;
+        nSubsidyHalvingInterval = 946000000;      // GCoin30: mining reward is cut in half every 946,000,000 blocks,
+        nEnforceBlockUpgradeMajority = 750;
+        nRejectBlockOutdatedMajority = 950;
+        nToCheckBlockUpgradeMajority = 1000;
+        nMinerThreads = 0;
+        nTargetTimespan = 0.23 * 24 * 60 * 60; // GCoin01: 0.23 day
+        nTargetSpacing =  10;               // GCoin01: 10 secs/tx
+        // After nTargetTimespan / nTargetSpacing blocks, the difficulty changes
+        // 7 * 24 * 60 * 60 / (5 * 60) = 2520 blocks
+        
+        const char* pszTimestamp = "OpenNet GCoin Project 2014.8 GCoin01";
+        CMutableTransaction txNew;
+        txNew.vin.resize(1);
+        txNew.vout.resize(1);
+        txNew.vin[0].scriptSig = CScript() << 486604799 << CScriptNum(4) << vector<unsigned char>((const unsigned char*)pszTimestamp, (const unsigned char*)pszTimestamp + strlen(pszTimestamp));
+        txNew.vout[0].nValue = 50 * COIN;
+        txNew.vout[0].scriptPubKey = CScript() << ParseHex("046e1c03e58f5d1b64f3ce1e767a6ef73ca66bf64aa5b7920a7acb49b2d4b69f93df9505646b24c38cb5bd4d9ee446e8a922f19aa2246f0d86a576841fe03c74dc") << OP_CHECKSIG;
+        genesis.vtx.push_back(txNew);
+        genesis.hashPrevBlock = 0;
+        genesis.hashMerkleRoot = genesis.BuildMerkleTree();
+        genesis.nVersion = 1;
+        genesis.nTime    = 1407345290;
+        genesis.nBits    = 0x1d00ffff;
+        genesis.nNonce   = 2237305882;
+        hashGenesisBlock = genesis.GetHash();
+        // genesis hash: 00000000099f1f4d0f8fc7259ee504a7d52ca0d261fc6e719e0200af05f81338
+
+        base58Prefixes[PUBKEY_ADDRESS] = list_of(0);
+        base58Prefixes[SCRIPT_ADDRESS] = list_of(5);
+        base58Prefixes[SECRET_KEY] =     list_of(128);
+        base58Prefixes[EXT_PUBLIC_KEY] = list_of(0x04)(0x88)(0xB2)(0x1E);
+        base58Prefixes[EXT_SECRET_KEY] = list_of(0x04)(0x88)(0xAD)(0xE4);
+        
+        // Convert the pnSeeds array into usable address objects.
+        for (unsigned int i = 0; i < ARRAYLEN(pnGCoinSeed); i++)
+        {
+            // It'll only connect to one or two seed nodes because once it connects,
+            // it'll get a pile of addresses with newer timestamps.
+            // Seed nodes are given a random 'last seen time' of between one and two
+            // weeks ago.
+            const int64_t nOneWeek = 7*24*60*60;
+            struct in_addr ip;
+            memcpy(&ip, &pnGCoinSeed[i], sizeof(ip));
+            CAddress addr(CService(ip, GetDefaultPort()));
+            addr.nTime = GetTime() - GetRand(nOneWeek) - nOneWeek;
+            vFixedSeeds.push_back(addr);
+        }
+        
+        fRequireRPCPassword = true;
+        fMiningRequiresPeers = true;
+        fDefaultCheckMemPool = false;
+        fAllowMinDifficultyBlocks = false;
+        fRequireStandard = true;
+        fMineBlocksOnDemand = false;
+    }
+};
+
+static CGCoin01Params gCoin01Params;
+
 static CChainParams *pCurrentParams = 0;
 
 const CChainParams &Params() {
@@ -295,6 +523,15 @@ void SelectParams(CBaseChainParams::Network network) {
             break;
         case CBaseChainParams::REGTEST:
             pCurrentParams = &regTestParams;
+            break;
+        case CBaseChainParams::GCOIN30:
+            pCurrentParams = &gCoin30Params;
+            break;
+        case CBaseChainParams::GCOIN12:
+            pCurrentParams = &gCoin12Params;
+            break;
+        case CBaseChainParams::GCOIN01:
+            pCurrentParams = &gCoin01Params;
             break;
         default:
             assert(false && "Unimplemented network");

@@ -50,6 +50,45 @@ public:
 };
 static CBaseRegTestParams regTestParams;
 
+//
+// GCoin 5 min/tx
+//
+class CBaseGCoin30Params : public CBaseMainParams {
+  public:
+    CBaseGCoin30Params() {
+      networkID = CBaseChainParams::GCOIN30;
+      nRPCPort = 28332;
+      strDataDir = "gcoin30";
+    }
+};
+static CBaseGCoin30Params gCoin30Params;
+
+//
+// GCoin 2 min/tx
+//
+class CBaseGCoin12Params : public CBaseMainParams {
+  public:
+    CBaseGCoin12Params() {
+      networkID = CBaseChainParams::GCOIN12;
+      nRPCPort = 38332;
+      strDataDir = "gcoin12";
+    }
+};
+static CBaseGCoin12Params gCoin12Params;
+
+//
+// GCoin 10 sec/tx
+//
+class CBaseGCoin01Params : public CBaseMainParams {
+  public:
+    CBaseGCoin01Params() {
+      networkID = CBaseChainParams::GCOIN01;
+      nRPCPort = 48332;
+      strDataDir = "gcoin01";
+    }
+};
+static CBaseGCoin01Params gCoin01Params;
+
 static CBaseChainParams *pCurrentBaseParams = 0;
 
 const CBaseChainParams &BaseParams() {
@@ -68,6 +107,15 @@ void SelectBaseParams(CBaseChainParams::Network network) {
         case CBaseChainParams::REGTEST:
             pCurrentBaseParams = &regTestParams;
             break;
+        case CBaseChainParams::GCOIN30:
+            pCurrentBaseParams = &gCoin30Params;
+            break;
+        case CBaseChainParams::GCOIN12:
+            pCurrentBaseParams = &gCoin12Params;
+            break;
+        case CBaseChainParams::GCOIN01:
+            pCurrentBaseParams = &gCoin01Params;
+            break;
         default:
             assert(false && "Unimplemented network");
             return;
@@ -77,7 +125,11 @@ void SelectBaseParams(CBaseChainParams::Network network) {
 bool SelectBaseParamsFromCommandLine() {
     bool fRegTest = GetBoolArg("-regtest", false);
     bool fTestNet = GetBoolArg("-testnet", false);
+    bool fGCoin30 = GetBoolArg("-gcoin30", false);
+    bool fGCoin12 = GetBoolArg("-gcoin12", false);
+    bool fGCoin01 = GetBoolArg("-gcoin01", false);
 
+    //TODO: use for loop to handle duplication problem
     if (fTestNet && fRegTest) {
         return false;
     }
@@ -86,6 +138,12 @@ bool SelectBaseParamsFromCommandLine() {
         SelectBaseParams(CBaseChainParams::REGTEST);
     } else if (fTestNet) {
         SelectBaseParams(CBaseChainParams::TESTNET);
+    } else if (fGCoin30) {
+        SelectBaseParams(CBaseChainParams::GCOIN30);
+    } else if (fGCoin12) {
+        SelectBaseParams(CBaseChainParams::GCOIN12);
+    } else if (fGCoin01) {
+        SelectBaseParams(CBaseChainParams::GCOIN01);
     } else {
         SelectBaseParams(CBaseChainParams::MAIN);
     }

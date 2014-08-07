@@ -19,6 +19,9 @@ public:
         MAIN,
         TESTNET,
         REGTEST,
+        GCOIN30,
+        GCOIN12,
+        GCOIN01,
 
         MAX_NETWORK_TYPES
     };
