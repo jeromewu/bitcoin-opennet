@@ -116,6 +116,5 @@ unsigned int ComputeMinWork(unsigned int nBase, int64_t nTime)
     if (bnResult > bnLimit)
         bnResult = bnLimit;
 
-    LogPrintf("bnResult: %d\n", bnResult.GetCompact());
     return bnResult.GetCompact();
 }

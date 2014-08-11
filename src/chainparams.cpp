@@ -100,7 +100,7 @@ unsigned int pnSeed[] =
 
 unsigned int pnGCoinSeed[] =
 {
-    0x6401a8c0, 0x205a708c,
+    0xc61d708c, 0x205a708c,
 };
 
 class CMainParams : public CChainParams {
