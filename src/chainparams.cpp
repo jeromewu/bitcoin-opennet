@@ -325,7 +325,7 @@ public:
         genesis.nNonce   = 610629;
         hashGenesisBlock = genesis.GetHash();
         // genesis hash: 00000a7490f9c2e2a23c904d583143c3a6c0790eac612b84bf5e05d32e3cdfc9
-       
+        vSeeds.push_back(CDNSSeedData("opennet", "seed.opennet")); 
 
         base58Prefixes[PUBKEY_ADDRESS] = list_of(0);
         base58Prefixes[SCRIPT_ADDRESS] = list_of(5);
@@ -400,6 +400,7 @@ public:
         genesis.nNonce   = 415156;
         hashGenesisBlock = genesis.GetHash();
         // genesis hash: 000009f6278b423a07b6556b38958a01b1ffaf28d8244a87008dac031094b5f8
+        vSeeds.push_back(CDNSSeedData("opennet", "seed.opennet")); 
         
         base58Prefixes[PUBKEY_ADDRESS] = list_of(0);
         base58Prefixes[SCRIPT_ADDRESS] = list_of(5);
@@ -474,6 +475,7 @@ public:
         genesis.nNonce   = 570964;
         hashGenesisBlock = genesis.GetHash();
         // genesis hash: 00000cde3647a42c560ad76cb073922b89e3b0eb2e5110542f7c588b9613f8a6
+        vSeeds.push_back(CDNSSeedData("opennet", "seed.opennet")); 
 
         base58Prefixes[PUBKEY_ADDRESS] = list_of(0);
         base58Prefixes[SCRIPT_ADDRESS] = list_of(5);
